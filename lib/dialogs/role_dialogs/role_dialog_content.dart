@@ -911,14 +911,14 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (dialogContext) => AlertDialog(
-                    backgroundColor: Colors.black87,
-                    title: const Text(
-                      'Choisir la cible',
-                      style: TextStyle(color: Colors.amber),
-                    ),
-                    content: StatefulBuilder(
-                      builder: (context, setDialogState) => Column(
+                  builder: (dialogContext) => StatefulBuilder(
+                    builder: (context, setDialogState) => AlertDialog(
+                      backgroundColor: Colors.black87,
+                      title: const Text(
+                        'Choisir la cible',
+                        style: TextStyle(color: Colors.amber),
+                      ),
+                      content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Text(
@@ -928,60 +928,50 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
                           const SizedBox(height: 16),
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.amber),
-                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<Player>(
-                                value: selectedPlayerToKill,
-                                dropdownColor: Colors.black87,
-                                icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
-                                isExpanded: true,
-                                hint: const Text(
-                                  'Choisir la victime',
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                                items: game.players
-                                    .where((p) => p.isAlive)
-                                    .map((Player player) {
-                                  return DropdownMenuItem<Player>(
-                                    value: player,
-                                    child: Text(
-                                      player.name,
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (Player? player) {
-                                  setDialogState(() {
-                                    selectedPlayerToKill = player;
-                                  });
-                                },
-                              ),
+                            child: DropdownButton<Player>(
+                              dropdownColor: Colors.black87,
+                              value: selectedPlayerToKill,
+                              hint: const Text('Sélectionner un joueur', style: TextStyle(color: Colors.white70)),
+                              items: game.players
+                                  .where((p) => p.isAlive)
+                                  .map((player) => DropdownMenuItem(
+                                        value: player,
+                                        child: Text(player.name,
+                                            style: const TextStyle(color: Colors.white)),
+                                      ))
+                                  .toList(),
+                              onChanged: (Player? value) {
+                                setDialogState(() {
+                                  selectedPlayerToKill = value;
+                                });
+                              },
                             ),
                           ),
                         ],
                       ),
+                      actions: [
+                        TextButton(
+                          child: const Text('Annuler', style: TextStyle(color: Colors.white70)),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                          onPressed: selectedPlayerToKill != null
+                              ? () {
+                                  selectedPlayerToKill!.wasAttackedTonight = true;
+                                  selectedPlayerToKill!.tryToKillPlayer(context);
+                                  game.deathPotionUsed = true;
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              : null,
+                          child: const Text('Empoisonner'),
+                        ),
+                      ],
                     ),
-                    actions: [
-                      TextButton(
-                        child: const Text('Annuler', style: TextStyle(color: Colors.white70)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                        onPressed: selectedPlayerToKill != null
-                            ? () {
-                                selectedPlayerToKill!.wasAttackedTonight = true;
-                                selectedPlayerToKill!.tryToKillPlayer(context);
-                                game.deathPotionUsed = true;
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            : null,
-                        child: const Text('Empoisonner'),
-                      ),
-                    ],
                   ),
                 );
               },
