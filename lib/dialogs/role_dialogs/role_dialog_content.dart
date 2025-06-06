@@ -598,10 +598,13 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           ),
           const SizedBox(height: 16),
           buildPlayerSelector(
-            label: 'Choisir un joueur à protéger',
+            label: selectedPlayer != null 
+                ? selectedPlayer!.name
+                : 'Choisir un joueur à protéger',
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
+            selectedPlayers: selectedPlayer != null ? [selectedPlayer!] : null,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -634,10 +637,13 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           ),
           const SizedBox(height: 16),
           buildPlayerSelector(
-            label: 'Choisir un joueur à protéger',
+            label: selectedPlayer != null 
+                ? selectedPlayer!.name
+                : 'Choisir un joueur à protéger',
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
+            selectedPlayers: selectedPlayer != null ? [selectedPlayer!] : null,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
