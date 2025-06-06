@@ -910,6 +910,9 @@ class _GameScreenState extends State<GameScreen> {
                           String oldRole = player.role;
                           player.role = newRole;
                           
+                          // Mettre à jour secondChance selon le rôle
+                          player.secondChance = (newRole == 'Mère Grand');
+                          
                           // Mettre à jour la liste des rôles actifs
                           if (!widget.game.players.any((p) => p.role == oldRole)) {
                             widget.game.activeRoles.remove(oldRole);

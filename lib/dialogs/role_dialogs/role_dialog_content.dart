@@ -59,8 +59,10 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     required void Function(Player?) onSelected,
     bool excludeSelected = false,
     List<Player>? selectedPlayers,
+    Player? selectedPlayer,
   }) {
     var availablePlayers = getAlivePlayers();
+
     if (excludeSelected && selectedPlayers != null) {
       availablePlayers = availablePlayers
           .where((p) => !selectedPlayers.contains(p))
@@ -79,10 +81,12 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           isExpanded: true,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           hint: Text(
-            label,
-            style: const TextStyle(color: Colors.white70),
+            selectedPlayer?.name ?? label,
+            style: TextStyle(
+              color: selectedPlayer != null ? Colors.white : Colors.white70
+            ),
           ),
-          value: null,
+          value: selectedPlayer,
           items: availablePlayers.map((player) {
             return DropdownMenuItem(
               value: player,
@@ -121,6 +125,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
                 firstLover = player;
               });
             },
+            selectedPlayer: firstLover,
           ),
           const SizedBox(height: 16),
           buildPlayerSelector(
@@ -132,6 +137,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             },
             excludeSelected: true,
             selectedPlayers: firstLover != null ? [firstLover!] : null,
+            selectedPlayer: secondLover,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -193,6 +199,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             onSelected: (player) {
               setState(() => selectedIdol = player);
             },
+            selectedPlayer: selectedIdol,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -375,6 +382,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
               onSelected: (player) {
                 setState(() => selectedVictim = player);
               },
+              selectedPlayer: selectedVictim,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -471,6 +479,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
+            selectedPlayer: selectedPlayer,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -800,6 +809,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
+            selectedPlayer: selectedPlayer,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -842,6 +852,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
+            selectedPlayer: selectedPlayer,
           ),
           const SizedBox(height: 16),
           ElevatedButton(

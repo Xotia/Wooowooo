@@ -129,74 +129,39 @@ class Player {
     if (role == 'Chasseur') {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: Colors.black87,
-          title: const Text(
-            'Pouvoir du Chasseur',
-            style: TextStyle(color: Colors.amber),
-          ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              Player? selectedTarget;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Le chasseur doit désigner un autre joueur à tuer avant de mourir',
-                    style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
+        builder: (context) => _HunterDialog(
+          onPlayerSelected: (selectedPlayer) {
+            selectedPlayer.tryToKillPlayer(context);
+            killPlayer();
+            // Au lieu de faire un pushReplacement, on pop simplement le dialogue
+            Navigator.pop(context);
+            // Afficher un dialogue de confirmation qui forcera un rebuild de l'écran parent
+            if (context.mounted) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Colors.black87,
+                  title: const Text(
+                    'Chasseur',
+                    style: TextStyle(color: Colors.amber),
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.amber),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Player>(
-                        dropdownColor: Colors.black87,
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
-                        isExpanded: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        hint: const Text(
-                          'Sélectionnez un joueur',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                        items: getOtherPlayers()
-                            .where((player) => player.isAlive)
-                            .map((Player player) {
-                          return DropdownMenuItem<Player>(
-                            value: player,
-                            child: Text(
-                              player.name,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (Player? selected) {
-                          setState(() => selectedTarget = selected);
-                        },
-                      ),
-                    ),
+                  content: Text(
+                    'Le chasseur $name a tiré sur ${selectedPlayer.name} avant de mourir.',
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Fermer', style: TextStyle(color: Colors.amber)),
                     ),
-                    onPressed: selectedTarget != null
-                        ? () {
-                            selectedTarget!.tryToKillPlayer(context);
-                            killPlayer(); // Le chasseur meurt après
-                            Navigator.pop(context);
-                          }
-                        : null,
-                    child: const Text('Tirer'),
-                  ),
-                ],
+                  ],
+                ),
               );
-            },
-          ),
+            }
+          },
+          getPlayers: () => getOtherPlayers().where((player) => player.isAlive).toList(),
         ),
       );
       return;
@@ -210,6 +175,26 @@ class Player {
       if (lover.name.isNotEmpty) {
         killPlayer();
         lover.killPlayer();
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.black87,
+            title: const Text(
+              'Amoureux Tragiques',
+              style: TextStyle(color: Colors.red),
+            ),
+            content: Text(
+              'Fou de chagrin, ${lover.name} a mis fin à ses jours après la mort de ${name}.',
+              style: const TextStyle(color: Colors.white),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Fermer', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
+        );
         return;
       }
     }
@@ -277,6 +262,106 @@ class Player {
       isAccusedByVote: json['isAccusedByVote'] ?? false,
       secondChance: json['secondChance'] ?? false,
       isDumb: json['isDumb'] ?? false,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Player && other.name == name && other.role == role;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, role);
+}
+
+class _HunterDialog extends StatefulWidget {
+  final Function(Player) onPlayerSelected;
+  final List<Player> Function() getPlayers;
+
+  const _HunterDialog({
+    Key? key,
+    required this.onPlayerSelected,
+    required this.getPlayers,
+  }) : super(key: key);
+
+  @override
+  __HunterDialogState createState() => __HunterDialogState();
+}
+
+class __HunterDialogState extends State<_HunterDialog> {
+  Player? selectedTarget;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.black87,
+      title: const Text(
+        'Pouvoir du Chasseur',
+        style: TextStyle(color: Colors.amber),
+      ),
+      content: StatefulBuilder(
+        builder: (context, setState) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Le chasseur doit désigner un autre joueur à tuer avant de mourir',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.amber),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<Player>(
+                  dropdownColor: Colors.black87,
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
+                  isExpanded: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  hint: Text(
+                    selectedTarget?.name ?? 'Sélectionnez un joueur',
+                    style: TextStyle(
+                      color: selectedTarget != null ? Colors.white : Colors.white70,
+                    ),
+                  ),
+                  value: selectedTarget,
+                  items: widget.getPlayers()
+                    .map((Player player) {
+                      return DropdownMenuItem<Player>(
+                        value: player,
+                        child: Text(
+                          player.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }).toList(),
+                  onChanged: (Player? selected) {
+                    setState(() {
+                      selectedTarget = selected;
+                    });
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              onPressed: selectedTarget != null
+                  ? () {
+                      widget.onPlayerSelected(selectedTarget!);
+                      Navigator.pop(context);
+                    }
+                  : null,
+              child: const Text('Tirer'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
