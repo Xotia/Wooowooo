@@ -1,0 +1,68 @@
+{
+    "6": {
+        "Werewolf": 2,
+        "Villager": 3,
+        "Seer": 1
+    },
+    "7": {
+        "Werewolf": 2,
+        "Villager": 3,
+        "Seer": 1,
+        "Hunter": 1
+    },
+    "8": {
+        "Werewolf": 2,
+        "Villager": 3,
+        "Seer": 1,
+        "Hunter": 1,
+        "Sister": 2
+    },
+    "9": {
+        "Werewolf": 2,
+        "Villager": 3,
+        "Seer": 1,
+        "Hunter": 1,
+        "Sister": 2,
+        "Angel": 1,
+        "Cupidon": 1,
+        "Little Girl": 1,
+        "Sorcerer": 1,
+        "Necromancer": 1
+    },
+    "10": {
+        "Werewolf": 2,
+        "Villager": 4
+    },
+    "11": {
+        "Werewolf": 2,
+        "Villager": 4
+    },
+    "12":{
+        "Werewolf": 3,
+        "Villager": 5
+    },
+    "13":{
+        "Werewolf": 3,
+        "Villager": 5
+    },
+    "14":{
+        "Werewolf": 3,
+        "Villager": 6
+    },
+    "15":{
+        "Werewolf": 3,
+        "Villager": 7
+    },
+    "16":{
+        "Werewolf": 3,
+        "Villager": 7
+    },
+    "17":{
+        "Werewolf": 4,
+        "Villager": 8
+    },
+    "18":{
+        "Werewolf": 4,
+        "Villager": 9
+    }
+}

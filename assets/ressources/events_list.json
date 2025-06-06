@@ -1,0 +1,53 @@
+{
+    "Villageois": [
+        "Cette nuit les loups n’auront que 5 secondes pour décider de leurs victimes, si une majorité de loups n’a pas pu décider d’une victime, personne n’est dévoré cette nuit.",
+        "La personne qui a été dévorée a pu laisser un message écrit avec son sang. Le joueur a le droit de dire 1 mot.",
+        "Le chasseur hérite du fusil de son grand-père et gagne une seconde balle.",
+        "Aurore Boréal : Le ciel est grandement illuminé ce soir. Si les loups devaient tuer quelqu’un, la voyante voit l’identité du loup le plus proche d’elle.",
+        "Aucun villageois ne peut mourir cette nuit.",
+        "Aucun gentil ne peut mourir cette nuit.",
+        "Cette nuit les morts votent pour élire un joueur qui n’aura pas le droit de voter le jour.",
+        "Cette nuit les morts votent pour élire un joueur qui n’aura pas le droit de parler au prochain vote."
+    ],
+    "Neutre": [
+        "Fête du village : Aucun joueur ne peut mourir ce jour et cette nuit.",
+        "Le prochain vote sera particulier, en effet, au lieu de voter pour la personne qu’on veut éliminer, on doit cette fois voter pour la personne qu’on ne veut pas voir mourir. La personne qui devra mourir sera celle qui a le moins de votes. En cas d’égalité, c’est la personne qui a le plus de votes qui tranche avec le maire.",
+        "Brume : Le brouillard ne se lève pas ce matin, tout le monde doit garder les yeux fermés pendant la journée. Vous pouvez essayer de vous lever mais à vos risques et périls.",
+        "Psychose : Les votes sont secret et communiqué au MJ à l’oreille",
+        "Le cri de la banshee : le premier joueur qui parle est condamné à mort",
+        "Cette nuit, les morts vont voter pour élire un joueur. Lors du prochain vote, ce joueur aura un vote qui compte double.",
+        "Cette nuit, les morts vont voter pour mettre en lumière un joueur. Pour le soutenir ou pour l’accuser, ça on ne sait pas.",
+        "Aucun personnage spécial ne peut mourir cette nuit.",
+        "Les femmes quittent le village pour la journée, elle ne participe pas aux échanges avec les hommes, mais elles ne peuvent pas être ciblées lors du vote.",
+        "Les hommes quittent le village pour la journée, ils ne peuvent pas participer aux échanges avec les femmes, mais ils ne peuvent pas être ciblés lors du vote.",
+        "Equité : Les hommes votent pour tuer une femme et les femmes votent pour tuer un homme.",
+        "Village discipliné : Le vote est à tour de rôle.",
+        "Interdit de couper la parole sinon on perd son droit de vote pour le tour",
+        "Voldemort : Pas le droit de dire le mot loup ou “moi” sinon on perd le vote",
+        "Le village boude : Tout le monde se retourne, aujourd’hui personne ne se lève, tout le monde se boude, pas le droit de se regarder sinon on perd le droit de vote.",
+        "Si l’ange meurt à ce tour, on autorise un second vote.",
+        "La voyante bavarde : La nuit prochaine, le rôle identifié par la voyante sera lu à haute voix par le MJ.",
+        "Jour de clémence : On tire à pile ou face si le joueur voté survit.",
+        "49.3 : Seul le maire vote aujourd’hui",
+        "Réélection : On re-élit un nouveau maire."
+    ],
+    "Loups": [
+        "Aucun loup ne peut mourir cette nuit",
+        "Aucun méchant ne peut mourir cette nuit",
+        "Malédiction du sang : si un loup est tué cette nuit, il parvient à entraîner sa victime dans la tombe avec lui.",
+        "Eclipse Lunaire : Il n’y a aucune lumière cette nuit, aucun personnage ne peut se réveiller cette nuit à l’exception des loups.",
+        "Voyante paranoïaque : La voyante voit tous les joueurs comme des loups.",
+        "Voyante Naïve : La voyante tous les joueurs comme des villageois.",
+        "La voyante myope : La nuit prochaine, la voyante n’est informée que du camp des joueurs qu’elle sonde.",
+        "Lune rouge : Cette nuit, les loups peuvent tuer 2 personnes.",
+        "Eclipse solaire : la nuit retombe immédiatement après une phase de jour très courte où aucune discussion n’a eu lieu (juste l’info des morts)."
+    ],
+    "Nouveau Role": [
+        "Un joueur devient Mère Grand.",
+        "Un joueur devient la veuve noire",
+        "Un joueur devient le boulanger"
+    ],
+    "Partie originale": [
+        "La peste noir : Pas de loups, le meneur élimine quelqu’un puis cette personne cible la prochaine victime et ainsi de suite, les joueurs gagnent uniquement quand ils disent qu’il n’y a pas de LG et que c’est la peste."
+    ]
+}
