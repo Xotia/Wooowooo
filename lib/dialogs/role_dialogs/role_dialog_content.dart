@@ -67,25 +67,22 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           .toList();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(color: Colors.white70),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<Player>(
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.amber),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<Player>(
           dropdownColor: Colors.black87,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.amber),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.amber),
-            ),
+          icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
+          isExpanded: true,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          hint: Text(
+            label,
+            style: const TextStyle(color: Colors.white70),
           ),
+          value: null,
           items: availablePlayers.map((player) {
             return DropdownMenuItem(
               value: player,
@@ -97,7 +94,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           }).toList(),
           onChanged: onSelected,
         ),
-      ],
+      ),
     );
   }
 
@@ -662,7 +659,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
   }
 
   Widget buildFoxDialog(List<Player> playersWithRole) {
-    List<Player> selectedPlayers = [];
+    List<Player?> selectedPlayers = [null, null, null];
 
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -675,30 +672,49 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           for (int i = 0; i < 3; i++) 
             Column(
               children: [
-                buildPlayerSelector(
-                  label: 'Choisir le joueur ${i + 1}',
-                  onSelected: (player) {
-                    setState(() {
-                      if (player != null) {
-                        if (selectedPlayers.length > i) {
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.amber),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<Player>(
+                      dropdownColor: Colors.black87,
+                      icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
+                      isExpanded: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      hint: Text(
+                        'Choisir le joueur ${i + 1}',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                      value: selectedPlayers[i],
+                      items: getAlivePlayers()
+                          .where((p) => !selectedPlayers.contains(p) || p == selectedPlayers[i])
+                          .map((player) {
+                        return DropdownMenuItem(
+                          value: player,
+                          child: Text(
+                            player.name,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (player) {
+                        setState(() {
                           selectedPlayers[i] = player;
-                        } else {
-                          selectedPlayers.add(player);
-                        }
-                      }
-                    });
-                  },
-                  excludeSelected: true,
-                  selectedPlayers: selectedPlayers,
+                        });
+                      },
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 8),
               ],
             ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: selectedPlayers.length == 3
+            onPressed: selectedPlayers.every((p) => p != null)
                 ? () {
-                    final hasWolf = selectedPlayers.any((p) => p.role == 'Loups');
+                    final hasWolf = selectedPlayers.any((p) => p?.role == 'Loups');
                     if (hasWolf) {
                       showDialog(
                         context: context,
@@ -714,7 +730,10 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
                               child: const Text('Fermer', style: TextStyle(color: Colors.amber)),
                             ),
                           ],
@@ -732,19 +751,21 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
                             style: TextStyle(color: Colors.amber),
                           ),
                           content: const Text(
-                            'Aucun loup parmi les joueurs reniflés. Le renard devient villageois.',
+                            'Aucun des joueurs reniflés n\'est un loup. Vous devenez villageois.',
                             style: TextStyle(color: Colors.white),
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
                               child: const Text('Fermer', style: TextStyle(color: Colors.amber)),
                             ),
                           ],
                         ),
                       );
                     }
-                    Navigator.of(context).pop();
                   }
                 : null,
             child: const Text('Valider'),
