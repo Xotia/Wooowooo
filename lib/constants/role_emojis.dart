@@ -28,6 +28,8 @@ class RoleEmojis {
     'Grand Méchant Loup': '⚫',
     'Loup Blanc': '⚪',
     'Nécromancien': '💀',
+    'Ange': '👼',
+    'Soeurs': '👭',
   };
 
   static String getEmoji(String role) {

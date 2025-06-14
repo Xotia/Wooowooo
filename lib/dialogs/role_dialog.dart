@@ -69,6 +69,10 @@ class _RoleDialogState extends State<RoleDialog> with RoleDialogContent<RoleDial
                 return buildSbireDialog(playersWithRole);
               case 'Loups':
                 return buildWolfDialog(playersWithRole);
+              case 'Grand Méchant Loup':
+                return buildGrandWolfDialog(playersWithRole);
+              case 'Loup Blanc':
+                return buildWhiteWolfDialog(playersWithRole);
               case 'Berger':
                 return buildShepherdDialog(playersWithRole);
               case 'Maire':
@@ -89,6 +93,8 @@ class _RoleDialogState extends State<RoleDialog> with RoleDialogContent<RoleDial
                 return buildBakerDialog(playersWithRole);
               case 'Corbeau':
                 return buildRavenDialog(playersWithRole);
+              case 'Loup Noir':
+                return buildBlackWolfDialog(playersWithRole);
               default:
                 return Text(
                   'Dialogue non implémenté pour le rôle $currentRole',

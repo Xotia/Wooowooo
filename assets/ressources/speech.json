@@ -1,0 +1,148 @@
+{
+    "introduction": {
+        "title": "Introduction de la partie",
+        "variants": [
+            "Bienvenue dans le village de Thiercelieux, un lieu où la tranquillité n'est qu'une façade... Car à la tombée de la nuit, certains d'entre vous se transformeront en créatures assoiffées de sang : les Loups-Garous.\n\nVous, villageois, devrez faire preuve de perspicacité et de coopération pour démasquer ces bêtes qui se cachent parmi vous. Mais attention, car dans l'ombre, d'autres forces sont à l'œuvre : un Nécromancien qui commande aux morts, une Voyante aux visions prophétiques, un Chasseur vengeur, et bien d'autres encore...\n\nChaque nuit apportera son lot de mystères et de morts suspectes. Chaque jour sera l'occasion de débattre, d'accuser, de défendre... Qui pourrez-vous croire ? Qui osera mentir ? La survie de votre village en dépend.\n\nQue le meilleur camp l'emporte, et que les Dieux vous protègent...",
+            "Les ombres s'allongent sur le paisible village de Thiercelieux... Mais cette paix n'est qu'illusion. Car parmi vous se cachent des créatures de la nuit, des Loups-Garous assoiffés de sang.\n\nVotre village n'est plus sûr. Chaque nuit, la mort rôde. Chaque jour, la méfiance grandit. Des pouvoirs ancestraux s'éveillent : le Nécromancien susurre aux morts, la Voyante perce les secrets, le Chasseur attend son heure...\n\nVous devrez faire preuve de ruse, de courage et parfois de cruauté pour survivre. Les apparences sont trompeuses, et vos amis d'hier pourraient bien être vos bourreaux de demain.\n\nQue la partie commence, et puissent les plus rusés l'emporter...",
+            "Voyageurs fatigués, vous voici arrivés aux portes de Sombremont, un village perdu dans les brumes des Terres Maudites. Les corbeaux croassent lugubrement depuis les tours effondrées du vieux château, et les habitants vous regardent avec méfiance depuis leurs fenêtres barricadées. Car ici, quand la lune se lève pleine et argentée, des hurlements déchirent la nuit. Les légendes parlent d'une malédiction ancestrale qui ronge le cœur même de cette communauté. Certains parmi vous portent peut-être déjà la marque de la bête... \n\nMais pour l'heure, le soleil brille encore. Faites connaissance, tissez des liens, car bientôt, très bientôt, vous devrez décider en qui placer votre confiance... et qui doit mourir pour que le village survive.",
+            "Écoutez… Vous entendez ? Ce silence anormal, ce vent qui siffle entre les maisons désertées… Ce village, autrefois paisible, est désormais maudit. Chaque nuit, des cris s’élèvent dans l’obscurité, déchirant le silence comme une lame froide. Chaque matin, on retrouve des portes ouvertes, des traces de griffes sur les murs… et parfois, un villageois manque à l’appel.\n\n Les anciens racontent qu’une malédiction plane ici. Une créature, ou peut-être plusieurs, se cachent parmi nous. Ils ressemblent à des humains le jour… Mais à la tombée de la nuit, sous le voile de l’ombre, ils révèlent leur véritable nature : celle de monstres aux crocs acérés, aux yeux luisants, assoiffés de chair et de sang. \n\nPersonne ne sait qui est encore humain… et qui est déjà condamné. Le danger est partout. Votre voisin, votre ami, peut-être même la personne en qui vous avez le plus confiance… pourrait être l’un d’eux. \n\nCe soir, il n’y aura pas d’issue. Ce soir, la chasse commence. Villageois, saurez-vous retrouver les bêtes avant qu’il ne soit trop tard ? Ou laisserez-vous la peur vous aveugler… jusqu’à ce que le mal ait tout dévoré ? \n\nTendez l’oreille… Un souffle, un bruit de pas… Un dernier avertissement avant que la nuit ne tombe : faites les bons choix… car l’aube ne se lèvera peut-être jamais. \n\nQue le jeu commence… et que le sang coule."
+        ]
+    },
+    "first_night": {
+        "title": "Première nuit",
+        "variants": [
+            "Le soleil se couche sur le village de Thiercelieux... Les villageois, épuisés par leur journée de labeur, rejoignent leurs demeures et s'endorment profondément. Mais pour certains d'entre vous, la nuit ne fait que commencer...\n\nDans l'obscurité, des yeux luisants s'ouvrent. Des crocs acérés brillent sous la lueur de la lune. Les Loups-Garous s'éveillent, prêts à faire leur première victime.\n\nMais ils ne sont pas les seuls à veiller dans la nuit... D'autres pouvoirs s'éveillent, d'autres destins se nouent dans les ténèbres...",
+            "Les derniers rayons du soleil disparaissent derrière les montagnes, plongeant Thiercelieux dans l'obscurité. Le village s'endort, ignorant le danger qui rôde...\n\nLa lune se lève, pleine et menaçante. C'est l'heure où les Loups-Garous révèlent leur véritable nature. Leurs griffes s'allongent, leurs crocs luisent dans la nuit. La chasse va commencer.\n\nMais d'autres créatures s'éveillent aussi dans les ténèbres. Des êtres aux pouvoirs mystérieux, prêts à jouer leur rôle dans cette nuit fatidique...",
+            "Les chandelles vacillent dans leurs chandeliers de bronze, et les ombres dansent sur les murs de pierre. Dehors, le vent siffle entre les branches nues des chênes centenaires. La nuit tombe sur Sombremont, et avec elle, l'heure du choix approche. \n\nLes loups-garous sentent déjà le sang qui bout dans leurs veines. Leur nature bestiale s'éveille avec les premières étoiles. Ils rôdent parmi vous, masqués par des visages humains, mais leurs yeux luisent d'une faim ancestrale. \n\nVillageois, préparez-vous. Car au lever du jour, l'un d'entre vous ne verra plus jamais la lumière. La chasse commence... et vous êtes à la fois le chasseur et la proie."
+        ]
+    },
+    "first_morning": {
+        "title": "Premier matin",
+        "variants": [
+            "L'aube se lève sur le village, dissipant peu à peu les ombres de la nuit. Les villageois s'éveillent un à un, découvrant avec effroi les traces du passage des Loups-Garous...\n\nLa peur et le doute s'installent. Qui peut-on encore croire ? Qui se cache derrière un masque d'innocence ? La chasse aux Loups-Garous commence, mais prenez garde à ne pas condamner un innocent dans votre quête de justice...",
+            "Les premiers rayons du soleil percent la brume matinale, révélant les traces sanglantes de la nuit passée. Le village s'éveille dans la crainte, chacun redoutant de découvrir qui a succombé aux crocs des bêtes...\n\nLes regards se croisent, chargés de suspicion. Les alliances d'hier sont oubliées. Une terrible vérité s'impose : l'ennemi est parmi nous, portant le masque d'un ami. La traque peut commencer...",
+            "L'aube se lève rouge sang sur Sombremont. Un nouveau corps git sans vie dans la rue pavée, témoignage de la fureur nocturne qui hante ces lieux. Les cloches de l'ancienne chapelle sonnent le glas, appelant les survivants à se rassembler sur la place du marché.\n\n Regardez-vous les uns les autres. Scrutez ces visages que vous pensiez connaître. Car l'un d'eux dissimule des crocs acérés derrière un sourire menteur. L'un d'eux a du sang innocent sur les mains. \n\nIl est temps de délibérer, d'accuser, de juger. Mais prenez garde : un vote précipité pourrait envoyer un innocent à la potence... et laisser le véritable monstre libre de frapper à nouveau quand viendra la prochaine nuit sans lune. \n\nQue commence le procès. Que la justice... ou l'erreur... suive son cours."
+        ]
+    },
+    "village_vote": {
+        "title": "Vote du village",
+        "variants": [
+            "L'heure est venue pour le village de rendre sa justice. Les accusations fusent, les soupçons pèsent lourd...\n\nRéfléchissez bien avant de pointer du doigt votre voisin. Car une fois la sentence prononcée, il n'y aura pas de retour en arrière. Le village doit désigner celui qu'il pense être un Loup-Garou.\n\nQue celui qui recevra le plus de votes se prépare à faire face à son destin...",
+            "Le soleil est à son zénith, l'heure du jugement a sonné. La foule s'agite, la tension monte. Chacun scrute son voisin, cherchant la moindre trace de culpabilité...\n\nLes langues se délient, les accusations pleuvent. Mais attention, car condamner un innocent ne fera que renforcer les Loups-Garous. La décision du village doit être mûrement réfléchie.\n\nQue la justice du peuple soit rendue, pour le meilleur ou pour le pire..."
+        ]
+    },
+    "death_announcement": {
+        "title": "Annonce d'une mort",
+        "variants": [
+            "Un nouveau jour se lève, mais tous ne sont pas là pour le voir... Cette nuit, la mort a encore frappé notre village.\n\nNous pleurons la perte d'un des nôtres, tombé sous les crocs des bêtes... ou peut-être victime d'une force plus sombre encore. Que son âme trouve la paix, pendant que nous continuons notre lutte pour la survie.",
+            "L'aube apporte son lot de tragédie... Un nouveau corps a été découvert, victime de la fureur nocturne des Loups-Garous.\n\nLe village pleure l'un des siens, parti trop tôt dans la violence et le sang. Puisse sa mort ne pas être vaine, et nous rapprocher de la vérité sur ceux qui se cachent parmi nous..."
+        ]
+    },
+    "game_over": {
+        "title": "Fin de la partie",
+        "variants": [
+            "Le soleil se couche sur le village de Thiercelieux, et avec lui, les derniers espoirs de survie. Les Loups-Garous ont triomphé, éliminant tous ceux qui osaient se dresser contre eux.\n\nLe village est désormais à leur merci, et la nuit prochaine, ils continueront leur chasse sans entrave. Que les dieux vous protègent, car le mal règne ici.",
+            "La dernière lueur du jour s'éteint, et avec elle, les derniers vestiges d'espoir pour les villageois. Les Loups-Garous ont remporté la victoire, laissant derrière eux un village en ruines et des cœurs brisés.\n\nLeur règne de terreur ne fait que commencer. Que ceux qui restent se préparent à affronter les ténèbres qui s'annoncent..."
+        ]
+    },
+    "victory": {
+        "title": "Victoire",
+        "variants": [
+            "Le village a triomphé ! Les Loups-Garous ont été démasqués et chassés de Thiercelieux. La paix revient peu à peu, et les villageois peuvent enfin souffler.\n\nMais attention, car la menace pourrait resurgir à tout moment. Restez vigilants, car le mal ne dort jamais vraiment...",
+            "Les villageois ont réussi à éliminer les Loups-Garous ! La justice a été rendue, et la paix revient dans le village. Mais n'oubliez pas que le mal peut toujours renaître de ses cendres.\n\nCélébrez cette victoire, mais gardez l'œil ouvert. Car dans l'ombre, d'autres dangers guettent..."
+        ]
+    },
+    "Avocat": {
+        "title": "Avocat",
+        "variants": [
+            "La vérité n’a pas toujours sa place au village… Parfois, une voix seule peut sauver un innocent du bûcher. Tu es l’Avocat. Chaque jour, tu peux utiliser ton influence pour protéger un joueur des flammes, empêcher que le vote du village ne le condamne. Mais choisis bien… car protéger un monstre, c’est trahir l’humanité.",            
+            "La vérité n’a pas toujours sa place au village… Parfois, une voix seule peut sauver un innocent du bûcher. Tu es l’Avocat. Chaque jour, tu peux utiliser ton influence pour protéger un joueur des flammes, empêcher que le vote du village ne le condamne. Mais choisis bien… car protéger un monstre, c’est trahir l’humanité.",
+            "Maître Avocat, vous êtes un homme de loi respecté, formé dans les grandes universités du royaume. Votre éloquence et votre connaissance des codes anciens vous permettent de plaider la cause des innocents. Chaque jour, quand le village se rassemble pour juger, vous pouvez choisir de défendre quelqu'un et annuler tous les votes portés contre cette personne. Votre parole a le pouvoir de sauver une vie... mais choisissez avec sagesse, car vous ne pourrez pas vous défendre vous-même."
+        ]
+    },
+    "loups": {
+        "title": "Les Loups",
+        "variants": [
+            "La malédiction coule dans vos veines comme un poison brûlant. Vous êtes un Loup-Garou, enfant de la nuit et prédateur des innocents. Quand les ténèbres enveloppent Sombremont, votre vraie nature se réveille. Chaque nuit, vous devez vous réunir avec vos frères de meute pour choisir une victime. Mais attention : le jour, vous devez jouer le rôle du villageois ordinaire. Mentez, manipulez, semez le doute. Votre survie dépend de votre capacité à rester dans l'ombre... jusqu'à ce que vous soyez assez nombreux pour régner sur ce village.",
+            "Frère de la meute, la lune vous appelle et le sang innocent excite vos sens. Vous appartenez à la confrérie secrète des Loups-Garous, unis par une malédiction ancestrale. La nuit, vous chassez ensemble, unis par un lien que seule la mort peut briser. Le jour, vous devez dissimuler votre nature bestiale sous un masque d'humanité. Semez la discorde, accusez les innocents, protégez vos frères. Souvenez-vous : si vous mourez, vos secrets meurent avec vous. Mais si vous survivez assez longtemps, ce village sera votre terrain de chasse éternel.",
+            "L'odeur de la peur vous enivre, et la faim ancestrale ronge votre âme. Vous êtes marqué par la malédiction du Loup-Garou, condamné à errer entre deux mondes. Quand sonne minuit, la bête en vous rugit de plaisir : c'est l'heure de la chasse. Avec vos compagnons maudits, vous devez choisir qui mourra avant l'aube. Mais quand revient le jour, vous devez redevenir l'agneau parmi les agneaux. Votre plus grande force est votre duplicité : ils vous font confiance, ils vous sourient... sans savoir que vous rêvez déjà de déchirer leur gorge.",
+            "Le plus grand pouvoir d’un monstre… c’est de ne pas en avoir l’air. Tu es un Loup-Garou. Mais ici, tu es un ami, un voisin, un confident. Chaque mot que tu prononces peut sauver… ou condamner. Chaque regard, chaque vote, chaque soupir… est un outil pour tromper. Tu n’es pas un simple tueur. Tu es un artiste du mensonge. Laisse les villageois s’entre-déchirer pendant que tu souris. La meute avance, cachée dans la foule. Et bientôt, il ne restera que vous.",
+            "Ton cœur bat comme un tambour de guerre. Tes crocs brillent dans la nuit. Tu n’es plus un villageois : tu es la terreur. Tu es le Loup. Tu tues pour survivre. Tu déchires, tu dévoras, tu régneras. La meute te guide, et ensemble vous allez saigner ce village jusqu’à ce que plus rien ne bouge. La peur est ton alliée. Le doute, ton arme. Le feu de leurs torches s’éteindra dans le sang. Tu n’es pas un monstre… tu es la nature qui reprend ses droits.",
+            "Tu n’es plus tout à fait humain. Quand la nuit tombe, ton souffle se fait plus lourd, ta peau frissonne, et une soif incontrôlable t’envahit. Tu es un Loup-Garou. Chaque nuit, avec tes semblables, tu choisis une victime. Un nom. Un corps. Un silence éternel. Le jour venu, tu redeviens normal. Un masque d’innocence sur ton visage. Mais tu sais… tu SAIS que les autres sont à ta merci. Chasse… doucement. Discrètement. Jusqu’à ce que plus personne ne reste.",
+            "Les créatures de la nuit s'éveillent... Les Loups-Garous ouvrent leurs yeux luisants et découvrent leurs compagnons de chasse. Le village dort paisiblement, ignorant le danger qui rôde.\n\nChoisissez votre victime avec soin. Que le festin commence !",
+            "L'heure de la chasse a sonné. Les Loups-Garous se réveillent et se reconnaissent dans l'obscurité. Leurs crocs acérés brillent sous la lueur de la lune.\n\nDésignez ensemble celui qui ne verra pas le prochain lever de soleil..."
+        ]
+    },
+    "corbeau": {
+        "title": "Le Corbeau",
+        "variants": [
+            "Ô Corbeau, messager des présages et gardien des secrets. Perché dans l'ombre, vous observez tout, entendez tout. Chaque nuit, votre instinct vous guide vers celui qui éveille vos soupçons. Désignez secrètement votre cible au maître du jeu : au lever du jour, tous sauront que vous avez des doutes sur cette personne. Votre accusation silencieuse pourrait sauver le village... ou condamner un innocent. Les corneilles ne mentent jamais, mais parfois elles se trompent.",
+            "Tu es l’ombre dans les airs, le messager du doute. Chaque nuit, tu désignes un joueur à la vindicte populaire. Ton vote ne tue pas, mais il empoisonne les esprits. Tu es le Corbeau, et tu sèmeras la suspicion jusqu’à ce que la vérité éclate… ou que tout le village se dévore de l’intérieur.",
+            "Le Corbeau déploie ses ailes sombres dans la nuit. De son œil perçant, il observe le village et choisit celui sur qui planera le doute.\n\nDésignez celui qui recevra un vote supplémentaire lors du prochain conseil. Votre influence pourrait bien sceller le destin d'un villageois...",
+            "L'oiseau de mauvais augure s'éveille. Le Corbeau doit maintenant pointer du bec celui qui attirera la suspicion du village.\n\nQue votre choix soit guidé par l'instinct, car votre accusation pourrait bien faire pencher la balance..."
+        ]
+    },
+    "cupidon": {
+        "title": "Cupidon",
+        "variants": [
+            "Cupidon, divinité de l'amour éternel, votre flèche dorée peut unir deux âmes pour toujours. Dès la première nuit, vous devez choisir deux personnes qui deviendront les Amoureux. Leur destin sera à jamais lié : si l'un meurt, l'autre mourra de chagrin instantanément. Mais attention, car si l'un est loup et l'autre villageois, ils devront choisir entre leur amour et leur nature... Un amour qui pourrait soit sauver le village, soit le condamner.",
+            "Cupidon s'éveille, son arc à la main. Ses flèches d'amour vont lier à jamais le destin de deux villageois.\n\nChoisissez avec sagesse les deux cœurs que vous allez unir, car leur amour sera si fort qu'ils ne pourront survivre l'un sans l'autre...",
+            "Ton pouvoir est à double tranchant. Tu peux lier deux âmes… pour le meilleur ou pour le pire. Tu es Cupidon. Choisis deux joueurs, qui seront liés par un amour indéfectible. Mais si l’un meurt, l’autre le suivra… et si l’un est un monstre, l’autre trahira tout pour lui.",
+            "Le dieu de l'amour déploie ses ailes. Cette nuit, Cupidon va créer un lien indéfectible entre deux âmes du village.\n\nVos flèches sont prêtes... Qui seront les heureux élus dont les destins seront à jamais entrelacés ?"
+        ]
+    },
+    "enfant_sauvage": {
+        "title": "L'Enfant Sauvage",
+        "variants": [
+            "Enfant des bois, élevé par les loups mais ayant gardé son humanité, vous êtes un être entre deux mondes. Dès la première nuit, vous devez choisir un Modèle parmi les autres joueurs. Tant qu'il vit, vous restez du côté des villageois. Mais si votre Modèle meurt, la bête en vous prendra le dessus et vous rejoindrez définitivement la meute des loups-garous. Votre loyauté dépend entièrement de la survie de celui que vous admirez.",
+            "Ton cœur est encore jeune, mais ton destin sera terrible. Tu admires un joueur du village, mais si cette personne meurt, tu sombreras dans la folie… et rejoindras les loups. Tu es l’Enfant Sauvage. Prie pour que ton modèle reste en vie, ou accepte ton destin de devenir un monstre à ton tour.",
+            "L'Enfant Sauvage s'éveille, à la recherche d'un modèle. Cette nuit, il doit choisir celui qui deviendra son idole.\n\nChoisissez avec soin, car si votre idole venait à mourir, la bête qui sommeille en vous se réveillerait, vous transformant en Loup-Garou...",
+            "Les yeux de l'Enfant Sauvage s'ouvrent dans la nuit. Il est temps pour lui de choisir celui qu'il admirera et suivra jusqu'à la mort.\n\nQue votre choix soit guidé par l'instinct, car le destin de votre idole déterminera votre propre nature..."
+        ]
+    },
+    "necromancien": {
+        "title": "Le Nécromancien",
+        "variants": [
+            "Maître des arts interdits, vous communiquez avec les morts et percez les voiles de l'au-delà. Chaque nuit, vous pouvez interroger l'esprit d'un joueur éliminé pour connaître son véritable rôle. Les secrets de la tombe n'ont pas de mystère pour vous. Mais prenez garde : manipuler les forces de la mort a un prix, et les vivants se méfient de ceux qui parlent aux ombres.",
+            "Les morts ne parlent pas… sauf à toi. Chaque nuit, tu tends l’oreille et interroges les ombres. Tu es le Nécromancien. Grâce aux âmes défuntes, tu obtiens des indices, des murmures venus d’outre-tombe. Mais attention… certains esprits mentent.",
+            "Le Nécromancien s'éveille, ses pouvoirs obscurs grandissant avec chaque mort. Les esprits des défunts lui murmurent leurs secrets...\n\nÉcoutez attentivement les messages de l'au-delà, car ils pourraient bien révéler l'identité des Loups-Garous.",
+            "Le maître des morts ouvre les yeux. Le Nécromancien peut maintenant communier avec les âmes des disparus.\n\nQue les murmures des trépassés vous guident vers la vérité..."
+        ]
+    },
+    "renard": {
+        "title": "Le Renard",
+        "variants": [
+            "Ô Renard, créature de ruse et d'intelligence, vos sens aiguisés détectent la présence du mal. Chaque nuit, vous pouvez flairer trois joueurs consécutifs dans l'ordre de jeu. Si au moins l'un d'eux est un loup-garou, vous le saurez. Mais si aucun loup ne se trouve parmi eux, vous perdrez définitivement votre don et redeviendrez un simple villageois. Votre flair est puissant, mais il ne vous donnera qu'une seule chance d'erreur.",
+            "Tu es rusé, rapide et discret. Chaque nuit, tu sens l’odeur de la corruption. Tu es le Renard. Tu peux inspecter trois joueurs proches… et si un loup se cache parmi eux, tu le sauras. Mais si aucun monstre n’est là… tu perdras ton pouvoir, à jamais.",
+            "Le Renard s'éveille, son flair aiguisé prêt à débusquer les Loups-Garous. Cette nuit, il doit renifler trois villageois.\n\nChoisissez judicieusement qui renifler, car si vous ne trouvez pas de Loup parmi eux, vous perdrez votre pouvoir...",
+            "Le rusé Renard ouvre ses yeux perçants. Son odorat infaillible va tenter de détecter l'odeur des Loups-Garous.\n\nQue votre instinct vous guide vers les bonnes cibles, car une erreur pourrait vous coûter vos pouvoirs..."
+        ]
+    },
+    "voyante": {
+        "title": "La Voyante",
+        "variants": [
+            "Voyante aux yeux de cristal, les mystères du futur et du présent s'ouvrent à votre regard. Chaque nuit, vous pouvez consulter les cartes du destin et connaître la véritable nature d'une personne de votre choix. Vos visions sont toujours vraies, mais sachez que la connaissance est un fardeau. Vous devrez guider le village vers la vérité sans révéler la source de votre savoir, car les superstitieux pourraient vous prendre pour une sorcière.",
+            "Tu lis au-delà des apparences. Tu vois ce que les autres ignorent. Chaque nuit, les ombres te soufflent une vérité. Tu es la Voyante. Choisis un joueur, et je te révélerai s’il est loup-garou… Mais attention : les créatures n’aiment pas être démasquées.",
+            "La Voyante ouvre son troisième œil. Les voiles du secret se lèvent devant elle, révélant la véritable nature d'un villageois.\n\nChoisissez avec sagesse celui dont vous souhaitez percer le mystère, car cette connaissance pourrait être cruciale pour sauver le village.",
+            "L'oracle du village s'éveille. Cette nuit, la Voyante pourra lire dans l'âme d'un des habitants.\n\nQue votre don vous aide à discerner le vrai du faux, les amis des ennemis..."
+        ]
+    },
+    "sorciere": {
+        "title": "La Sorcière",
+        "variants": [
+            "Sorcière aux pouvoirs ancestraux, vous possédez deux philtres magiques d'une puissance extraordinaire. L'un peut ressusciter la victime des loups-garous avant l'aube, l'autre peut empoisonner n'importe qui durant la nuit. Chaque potion ne peut être utilisée qu'une seule fois dans toute la partie. Vous connaîtrez l'identité de la victime des loups avant de décider d'agir. Votre magie peut changer le cours du destin... mais à quel prix ?",
+            "Tu es la gardienne des secrets, détentrice de deux potions. L’une pour sauver… l’autre pour tuer. Tu es la Sorcière. Tu connais l’identité de la victime des loups chaque nuit, et tu peux agir. Mais tu n’as qu’une potion de chaque. Agis avec sagesse… ou avec vengeance.",
+            "La Sorcière s'éveille, ses potions mortelles et curatives à portée de main. Elle seule peut décider de sauver une vie... ou d'en prendre une.\n\nUtilisez vos potions avec sagesse, car vous ne pourrez utiliser chacune qu'une seule fois...",
+            "La maîtresse des potions ouvre les yeux. Entre ses mains, le pouvoir de vie et de mort sur les habitants du village.\n\nQue vos choix soient guidés par la raison, car vos précieuses potions sont en nombre limité..."
+        ]
+    },
+    "wendigo": {
+        "title": "Le Wendigo",
+        "variants": [
+            "Créature maudite des terres gelées, vous êtes né de la faim et du désespoir. Le Wendigo sommeille en vous, mais votre humanité résiste encore. Dès la première nuit, vous devez faire le choix qui définira votre existence : rester fidèle à votre nature humaine et rejoindre les villageois, ou céder à la malédiction et devenir l'allié des loups-garous. Ce choix est irréversible et scellera votre destin pour l'éternité. Que choisirez-vous : l'humanité ou la bête ?",
+            "Tu es une bête maudite. La première nuit, tu fais un choix : rejoindre les humains… ou céder à la bête en toi et devenir l’allié des loups. Tu es le Wendigo. Un pouvoir terrible t’habite. Mais attention : une fois ton choix fait… il n’y aura pas de retour en arrière.",
+            "Le Wendigo s'éveille, son esprit tourmenté déchiré entre deux natures. Cette nuit, il doit choisir son camp : rejoindre les villageois ou succomber à ses instincts bestiaux.\n\nQue votre choix reflète votre vraie nature, car il sera définitif...",
+            "La créature légendaire ouvre ses yeux. Le Wendigo doit maintenant décider de son allégeance.\n\nChoisissez avec soin votre voie, car elle déterminera votre rôle dans cette lutte entre le bien et le mal..."
+        ]
+    }
+}

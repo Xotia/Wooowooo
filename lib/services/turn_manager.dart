@@ -33,6 +33,24 @@ class TurnManager {
     if (TurnOrders.isSpecialEvent(role)) {
       return true;
     }
+
+    // Cas spécial pour le Grand Méchant Loup
+    if (role == 'Grand Méchant Loup') {
+      if (game.deadWolves > 0) return false;
+      return game.players.any((player) => player.role == role && player.isAlive);
+    }
+
+    // Cas spécial pour le Loup Blanc
+    if (role == 'Loup Blanc') {
+      // Si c'est le premier tour ou pas une nuit de Loup Blanc, on skip
+      if (_isFirstNight || !game.isWhiteWolfNight) return false;
+      // Vérifie s'il y a un Loup Blanc vivant et d'autres loups vivants
+      final hasWhiteWolf = game.players.any((p) => p.role == 'Loup Blanc' && p.isAlive);
+      final hasOtherWolves = game.players.any((p) => 
+        p.role.contains('Loup') && p.role != 'Loup Blanc' && p.isAlive);
+      return hasWhiteWolf && hasOtherWolves;
+    }
+
     return game.players.any((player) => player.role == role && player.isAlive);
   }
 
@@ -84,6 +102,9 @@ class TurnManager {
     if (game.currentPhase == DayPhase.night) {
       if (_isFirstNight) {
         _isFirstNight = false;
+      } else {
+        // Alterne le tour du Loup Blanc
+        game.isWhiteWolfNight = !game.isWhiteWolfNight;
       }
     } 
     _initializeTurnOrder();

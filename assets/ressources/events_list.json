@@ -7,7 +7,8 @@
         "Aucun villageois ne peut mourir cette nuit.",
         "Aucun gentil ne peut mourir cette nuit.",
         "Cette nuit les morts votent pour élire un joueur qui n’aura pas le droit de voter le jour.",
-        "Cette nuit les morts votent pour élire un joueur qui n’aura pas le droit de parler au prochain vote."
+        "Cette nuit les morts votent pour élire un joueur qui n’aura pas le droit de parler au prochain vote.",
+        "Si le village trouve un loup lors du prochain vote, la nuit prochaine, les loups n'auront que 5 secondes pour décider qui sera leur prochaine victime. Si ils n'ont pas le temps de se mettre d'accord, alors le tour des loups est annulé et aucun des village ne se fera dévoré."
     ],
     "Neutre": [
         "Fête du village : Aucun joueur ne peut mourir ce jour et cette nuit.",
@@ -29,7 +30,8 @@
         "La voyante bavarde : La nuit prochaine, le rôle identifié par la voyante sera lu à haute voix par le MJ.",
         "Jour de clémence : On tire à pile ou face si le joueur voté survit.",
         "49.3 : Seul le maire vote aujourd’hui",
-        "Réélection : On re-élit un nouveau maire."
+        "Réélection : On re-élit un nouveau maire.",
+        "Le premier loup qui a été éliminé pourra se reveiller lors du prochain vote du village. Il n'aura pas le droit de parler mais il pourra voter. Attention de bien réfléchir si vous lui faites confiance ou pas"
     ],
     "Loups": [
         "Aucun loup ne peut mourir cette nuit",

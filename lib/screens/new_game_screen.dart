@@ -127,40 +127,48 @@ class _NewGameScreenState extends State<NewGameScreen> {
                   ),
                   const SizedBox(height: 20),
                   // Champ de saisie des joueurs
-                  TextField(
-                    controller: _playersController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      hintText: 'Entrez les noms des joueurs, séparés par des virgules',
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                      labelText: 'Joueurs',
-                      labelStyle: TextStyle(
-                        color: Colors.amber,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(1.0, 1.0),
-                            blurRadius: 3.0,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white70),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.amber),
-                      ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.amber),
                     ),
-                    maxLines: 3,
+                    padding: const EdgeInsets.all(16),
+                    child: TextField(
+                      controller: _playersController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        hintText: 'Entrez les noms des joueurs, séparés par des virgules',
+                        hintStyle: TextStyle(
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 3.0,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        labelText: 'Joueurs',
+                        labelStyle: TextStyle(
+                          color: Colors.amber,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 3.0,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white70),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.amber),
+                        ),
+                      ),
+                      maxLines: 3,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   // Nombre de joueurs

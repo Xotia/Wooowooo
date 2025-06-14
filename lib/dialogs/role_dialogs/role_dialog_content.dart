@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import '../../models/player.dart';
 import '../../models/game.dart';
+import '../../services/role_manager.dart';
+import '../../services/speech_service.dart';
 
 mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
   Game get game;
@@ -102,6 +105,47 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     );
   }
 
+  Widget buildSpeechButton(BuildContext context, String roleKey) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: TextButton.icon(
+        onPressed: () {
+          final speech = SpeechService.getSpeech(roleKey.toLowerCase());
+          if (speech != null) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: Colors.black87,
+                title: Text(
+                  speech.title,
+                  style: const TextStyle(color: Colors.amber),
+                ),
+                content: SingleChildScrollView(
+                  child: Text(
+                    speech.getRandomText(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      height: 1.5,
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Fermer', style: TextStyle(color: Colors.amber)),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+        icon: const Icon(Icons.menu_book, color: Colors.green),
+        label: const Text('Speech', style: TextStyle(color: Colors.green)),
+      ),
+    );
+  }
+
   // Méthodes de construction des dialogues spécifiques aux rôles
   Widget buildCupidonDialog(List<Player> playersWithRole) {
     Player? firstLover;
@@ -111,6 +155,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
       builder: (context, setState) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          buildSpeechButton(context, "cupidon"),
           if (playersWithRole.isNotEmpty) ...[
             Text(
               '${playersWithRole.first.name} est Cupidon',
@@ -189,6 +234,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
+          buildSpeechButton(context, "enfant_sauvage"),
           Text(
             '${playersWithRole.first.name} est l\'Enfant Sauvage',
             style: const TextStyle(color: Colors.white),
@@ -223,6 +269,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
+          buildSpeechButton(context, "wendigo"),
           Text(
             '${playersWithRole.first.name} est le Wendigo',
             style: const TextStyle(color: Colors.white),
@@ -270,11 +317,38 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(height: 16),
-          buildPlayerSelector(
-            label: 'Choisir sa cible',
-            onSelected: (player) {
-              setState(() => selectedTarget = player);
-            },
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.amber),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<Player>(
+                dropdownColor: Colors.black87,
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
+                isExpanded: true,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                hint: Text(
+                  selectedTarget?.name ?? 'Choisir sa cible',
+                  style: TextStyle(
+                    color: selectedTarget != null ? Colors.white : Colors.white70,
+                  ),
+                ),
+                value: selectedTarget,
+                items: getAlivePlayers().map((player) {
+                  return DropdownMenuItem(
+                    value: player,
+                    child: Text(
+                      player.name,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (player) {
+                  setState(() => selectedTarget = player);
+                },
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -314,6 +388,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
             onSelected: (player) {
               setState(() => selectedTarget = player);
             },
+            selectedPlayer: selectedTarget,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -356,6 +431,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
       builder: (context, setState) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          buildSpeechButton(context, "loups"),
           const Text(
             'Les loups doivent se réveiller :',
             style: TextStyle(color: Colors.white),
@@ -462,133 +538,158 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     Player? selectedPlayer;
 
     return StatefulBuilder(
-      builder: (context, setState) => Column(
-        children: [
-          Text(
-            '${playersWithRole.first.name} est la Voyante',
-            style: const TextStyle(color: Colors.white),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Désigne un joueur pour voir son rôle.',
-            style: TextStyle(color: Colors.white),
-          ),
-          const SizedBox(height: 16),
-          buildPlayerSelector(
-            label: 'Choisir un joueur',
-            onSelected: (player) {
-              setState(() => selectedPlayer = player);
-            },
-            selectedPlayer: selectedPlayer,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: selectedPlayer != null
+      builder: (context, setState) {
+        return Column(
+          children: [
+            buildSpeechButton(context, "voyante"),
+            Text(
+              '${playersWithRole.first.name} est la Voyante',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Désigne un joueur pour voir son rôle.',
+              style: TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+            buildPlayerSelector(
+              label: 'Choisir un joueur',
+              onSelected: (player) {
+                setState(() => selectedPlayer = player);
+              },
+              selectedPlayer: selectedPlayer,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: selectedPlayer != null
                 ? () {
                     final playerToReveal = selectedPlayer!;
                     Navigator.of(context).pop();
                     
-                    // Attendre un peu avant d'afficher le nouveau dialogue
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      if (!context.mounted) return;
-                      
-                      showDialog(
-                        context: context,
-                        builder: (context) => Dialog(
-                          backgroundColor: Colors.black87,
-                          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            constraints: BoxConstraints(
-                              maxHeight: MediaQuery.of(context).size.height * 0.8,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    'Rôle de ${playerToReveal.name}',
-                                    style: const TextStyle(
-                                      color: Colors.amber,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                    if (!context.mounted) return;
+                    
+                    showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                        backgroundColor: Colors.black87,
+                        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.8,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  'Rôle de ${playerToReveal.name}',
+                                  style: const TextStyle(
+                                    color: Colors.amber,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          playerToReveal.role,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        playerToReveal.role,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        const SizedBox(height: 24),
-                                        Image.asset(
-                                          'assets/ressources/fiche/img/${_getRoleImagePath(playerToReveal.role)}.png',
-                                          height: MediaQuery.of(context).size.height * 0.6,
-                                          fit: BoxFit.contain,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            print('⚠️ Erreur lors du chargement de l\'image:');
-                                            print('🔍 Chemin tenté: assets/ressources/fiche/img/${_getRoleImagePath(playerToReveal.role)}.png');
-                                            print('🎭 Rôle du joueur: ${playerToReveal.role}');
-                                            print('❌ Erreur: $error');
-                                            print('📜 Stack trace: $stackTrace');
-                                            return const Icon(
-                                              Icons.error_outline,
-                                              color: Colors.red,
-                                              size: 60,
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: const Text(
-                                      'Fermer',
-                                      style: TextStyle(
-                                        color: Colors.amber,
-                                        fontSize: 20,
                                       ),
+                                      const SizedBox(height: 24),
+                                      Image.asset(
+                                        'assets/ressources/fiche/img/${_getRoleImagePath(playerToReveal.role)}.png',
+                                        height: MediaQuery.of(context).size.height * 0.6,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          print('⚠️ Erreur lors du chargement de l\'image:');
+                                          print('🔍 Chemin tenté: assets/ressources/fiche/img/${_getRoleImagePath(playerToReveal.role)}.png');
+                                          print('🎭 Rôle du joueur: ${playerToReveal.role}');
+                                          print('❌ Erreur: $error');
+                                          print('📜 Stack trace: $stackTrace');
+                                          return const Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red,
+                                            size: 60,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text(
+                                    'Fermer',
+                                    style: TextStyle(
+                                      color: Colors.amber,
+                                      fontSize: 20,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    });
+                      ),
+                    );
                   }
                 : null,
-            child: const Text('Voir le rôle'),
-          ),
-        ],
-      ),
+              child: const Text('Voir le rôle'),
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget buildNecromancerDialog(List<Player> playersWithRole) {
+    String message;
+    if (game.deadPlayers > 0) {
+      final messageIndex = game.currentDay;
+      if (messageIndex >= RoleManager.necroMessages.length) {
+        message = "Le nombre de morts est tellement grand que le nécromancien commence à devenir fou.\n\n${RoleManager.necroMessages[Random().nextInt(RoleManager.necroMessages.length)]}";
+      } else {
+        message = RoleManager.necroMessages[messageIndex-1];
+      }
+    } else {
+      message = RoleManager.necroMessages[0];
+    }
+    
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        buildSpeechButton(context, "necromancien"),
+        if (playersWithRole.isNotEmpty) ...[
+          Text(
+            '${playersWithRole.first.name} est le Nécromancien',
+            style: const TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 16),
+        ],
         Text(
-          '${playersWithRole.first.name} est le Nécromancien',
-          style: const TextStyle(color: Colors.white),
+          'Nombre de morts : ${game.deadPlayers}',
+          style: const TextStyle(
+            color: Colors.red,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
-        const Text(
-          'Tour du Nécromancien',
-          style: TextStyle(color: Colors.white),
+        Text(
+          message,
+          style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ],
@@ -640,19 +741,18 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
+          buildSpeechButton(context, "avocat"),
           Text(
             '${playersWithRole.first.name} est l\'Avocat',
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(height: 16),
           buildPlayerSelector(
-            label: selectedPlayer != null 
-                ? selectedPlayer!.name
-                : 'Choisir un joueur à protéger',
+            label: 'Choisir un joueur à protéger',
             onSelected: (player) {
               setState(() => selectedPlayer = player);
             },
-            selectedPlayers: selectedPlayer != null ? [selectedPlayer!] : null,
+            selectedPlayer: selectedPlayer,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
@@ -679,6 +779,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
+          buildSpeechButton(context, "renard"),
           Text(
             '${playersWithRole.first.name} est le Renard',
             style: const TextStyle(color: Colors.white),
@@ -766,7 +867,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
                             style: TextStyle(color: Colors.amber),
                           ),
                           content: const Text(
-                            'Aucun des joueurs reniflés n\'est un loup. Vous devenez villageois.',
+                            'Aucun des joueurs reniflés n\'est un loup. Le renard devient villageois.',
                             style: TextStyle(color: Colors.white),
                           ),
                           actions: [
@@ -840,6 +941,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
       builder: (context, setState) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          buildSpeechButton(context, "corbeau"),
           if (playersWithRole.isNotEmpty) ...[
             Text(
               '${playersWithRole.first.name} est le Corbeau',
@@ -878,7 +980,6 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
 
   Widget buildWitchDialog(List<Player> playersWithRole) {
     Player? selectedPlayerToKill;
-    // Trouver le joueur qui a été attaqué cette nuit
     final attackedPlayer = game.players.firstWhere(
       (player) => player.wasAttackedTonight,
       orElse: () => game.players.first,
@@ -887,6 +988,7 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
     return StatefulBuilder(
       builder: (context, setState) => Column(
         children: [
+          buildSpeechButton(context, "sorciere"),
           if (playersWithRole.isNotEmpty) ...[
             Text(
               '${playersWithRole.first.name} est la Sorcière',
@@ -1098,6 +1200,238 @@ mixin RoleDialogContent<T extends StatefulWidget> on State<T> {
           ),
         ],
       ],
+    );
+  }
+
+  Widget buildGrandWolfDialog(List<Player> playersWithRole) {
+    // On ne fait rien la première nuit
+    if (game.currentDay == 0) {
+      return const Text(
+        'Le Grand Méchant Loup ne se réveille pas la première nuit.',
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+    }
+
+    Player? selectedVictim;
+
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (playersWithRole.isNotEmpty) ...[
+            Text(
+              '${playersWithRole.first.name} est le Grand Méchant Loup',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+          ],
+          Text(
+            game.deadWolves > 0
+                ? 'Il n\'y a plus de loups en vie, le Grand Méchant Loup n\'a plus de pouvoir.'
+                : 'Le Grand Méchant Loup peut désigner une victime supplémentaire.',
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+          if (game.deadWolves == 0) ...[
+            const SizedBox(height: 16),
+            buildPlayerSelector(
+              label: 'Choisir une victime',
+              onSelected: (player) {
+                setState(() => selectedVictim = player);
+              },
+              selectedPlayer: selectedVictim,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: selectedVictim != null
+                  ? () {
+                      selectedVictim!.wasAttackedTonight = true;
+                      Navigator.of(context).pop();
+                    }
+                  : null,
+              child: const Text('Valider'),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget buildBlackWolfDialog(List<Player> playersWithRole) {
+    // Ne se réveille pas la première nuit
+    if (game.currentDay == 0) {
+      return const Text(
+        'Le Loup Noir ne se réveille pas la première nuit.',
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+    }
+
+    // Ne se réveille plus après avoir utilisé son pouvoir
+    if (game.blackWolfTransformation) {
+      return const Text(
+        'Le Loup Noir a déjà utilisé son pouvoir de transformation.',
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+    }
+
+    // Trouve le joueur qui a été attaqué par les loups
+    final attackedPlayer = game.players.firstWhere(
+      (p) => p.wasAttackedTonight,
+      orElse: () => game.players.first,
+    );
+
+    if (!attackedPlayer.wasAttackedTonight) {
+      return const Text(
+        'Aucun joueur n\'a été ciblé par les loups.',
+        style: TextStyle(color: Colors.white),
+        textAlign: TextAlign.center,
+      );
+    }
+
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (playersWithRole.isNotEmpty) ...[
+            Text(
+              '${playersWithRole.first.name} est le Loup Noir',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+          ],
+          Text(
+            '${attackedPlayer.name} vient d\'être ciblé par les loups.\nSouhaitez-vous l\'épargner et le transformer en loup ?',
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  attackedPlayer.wasAttackedTonight = false;
+                  attackedPlayer.wasTransformedIntoWolf = true;
+                  game.blackWolfTransformation = true;
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (dialogContext) => AlertDialog(
+                      backgroundColor: Colors.black87,
+                      title: const Text(
+                        'Transformation',
+                        style: TextStyle(color: Colors.amber),
+                      ),
+                      content: Text(
+                        '${attackedPlayer.name} a été épargné et transformé en loup par le Loup Noir.\nIl se réveillera dorénavant avec les loups (en plus de son rôle éventuel).',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: const Text('Transformer'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Ne rien faire'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildWhiteWolfDialog(List<Player> playersWithRole) {
+    Player? selectedVictim;
+    final wolves = game.players.where((p) => 
+      p.isAlive && 
+      (p.role == 'Loups' || p.role == 'Grand Méchant Loup') &&
+      p.role != 'Loup Blanc'
+    ).toList();
+
+    return StatefulBuilder(
+      builder: (context, setState) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (playersWithRole.isNotEmpty) ...[
+            Text(
+              '${playersWithRole.first.name} est le Loup Blanc',
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+          ],
+          if (wolves.isEmpty) ...[
+            const Text(
+              'Il n\'y a pas d\'autres loups en vie à attaquer.',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ] else ...[
+            const Text(
+              'Choisissez un loup à attaquer',
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.amber),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<Player>(
+                  dropdownColor: Colors.black87,
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.amber),
+                  isExpanded: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  hint: Text(
+                    selectedVictim?.name ?? 'Choisir un loup',
+                    style: TextStyle(
+                      color: selectedVictim != null ? Colors.white : Colors.white70
+                    ),
+                  ),
+                  value: selectedVictim,
+                  items: wolves.map((wolf) {
+                    return DropdownMenuItem(
+                      value: wolf,
+                      child: Text(
+                        wolf.name,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (player) {
+                    setState(() => selectedVictim = player);
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: selectedVictim != null
+                  ? () {
+                      selectedVictim!.wasAttackedTonight = true;
+                      Navigator.of(context).pop();
+                    }
+                  : null,
+              child: const Text('Valider'),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

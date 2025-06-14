@@ -4,7 +4,9 @@ import '../models/game.dart';
 import '../models/player.dart';
 import '../services/role_manager.dart';
 import '../services/turn_manager.dart';
+import '../services/speech_service.dart';
 import '../dialogs/game_info_dialog.dart';
+import '../dialogs/speech_list_dialog.dart';
 import '../constants/turn_orders.dart';
 import '../dialogs/role_dialog.dart';
 
@@ -27,6 +29,16 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
     _updateBackgroundForPhase(widget.game.currentPhase);
     _turnManager = TurnManager(game: widget.game);
+    _initializeServices();
+  }
+
+  Future<void> _initializeServices() async {
+    try {
+      await SpeechService.initialize();
+      setState(() {}); // Force un rebuild après l'initialisation
+    } catch (e) {
+      print('Erreur lors de l\'initialisation des services: $e');
+    }
   }
 
   void _updateBackgroundForPhase(DayPhase phase) {
@@ -103,6 +115,7 @@ class _GameScreenState extends State<GameScreen> {
       widget.game.currentPhase = DayPhase.night;
       widget.game.alivePlayers = numberOfPlayers;
       widget.game.deadPlayers = 0;
+      widget.game.deadWolves = 0; // Réinitialisation du compteur de loups morts
       widget.game.healPotionUsed = false;
       widget.game.deathPotionUsed = false;
 
@@ -258,20 +271,6 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showSunriseDialog() {
-    // Récupération des informations nécessaires
-    final bakedPlayer = widget.game.players.firstWhere(
-      (p) => p.isChosenByBaker,
-      orElse: () => Player(name: '', role: ''),
-    );
-    
-    final accusedPlayer = widget.game.players.firstWhere(
-      (p) => p.isAccusedByRaven,
-      orElse: () => Player(name: '', role: ''),
-    );
-    
-    final hasShepherd = widget.game.activeRoles.contains('Berger') &&
-        widget.game.players.any((p) => p.role == 'Berger' && p.isAlive);
-
     // Tenter de tuer tous les joueurs attaqués
     for (final player in widget.game.players) {
       if (player.wasAttackedTonight) {
@@ -290,49 +289,23 @@ class _GameScreenState extends State<GameScreen> {
         ),
         textAlign: TextAlign.center,
       ),
-      const SizedBox(height: 16),
+      const SizedBox(height: 24),
     ];
 
-    if (bakedPlayer.name.isNotEmpty) {
-      messages.add(
-        Text(
-          'Le boulanger a livré une baguette de pain chez ${bakedPlayer.name}.',
-          style: const TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      );
-      messages.add(const SizedBox(height: 8));
-    }
-
-    if (accusedPlayer.name.isNotEmpty) {
-      messages.add(
-        Text(
-          'Des corbeaux se sont posés sur le toit de ${accusedPlayer.name}.',
-          style: const TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      );
-      messages.add(const SizedBox(height: 8));
-    }
-
-    if (hasShepherd) {
-      messages.add(
-        const Text(
-          'Les chiens de berger reniflent, si des loups sont près du Berger, ils aboieront.',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      );
-      messages.add(const SizedBox(height: 8));
-    }
-
-    // Liste des joueurs attaqués pendant la nuit
-    final attackedPlayers = widget.game.players.where((p) => p.wasAttackedTonight).toList();
+    // Liste des joueurs tués pendant la nuit
+    final killedPlayers = widget.game.players
+        .where((p) => p.wasAttackedTonight && !p.isAlive)
+        .toList();
     
-    if (attackedPlayers.isEmpty) {
+    // Liste des joueurs qui ont survécu à une attaque
+    final survivedPlayers = widget.game.players
+        .where((p) => p.wasAttackedTonight && p.isAlive)
+        .toList();
+    
+    if (killedPlayers.isEmpty && survivedPlayers.isEmpty) {
       messages.add(
         const Text(
-          'Aucun joueur n\'a été attaqué cette nuit.',
+          'La nuit a été calme, aucun joueur n\'a été attaqué.',
           style: TextStyle(
             color: Colors.green,
             fontWeight: FontWeight.bold,
@@ -342,64 +315,61 @@ class _GameScreenState extends State<GameScreen> {
         ),
       );
     } else {
-      messages.add(
-        const Text(
-          'Les joueurs suivants ont été attaqués cette nuit :',
-          style: TextStyle(
-            color: Colors.orange,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-      messages.add(const SizedBox(height: 8));
-      
-      for (final player in attackedPlayers) {
+      if (killedPlayers.isNotEmpty) {
         messages.add(
-          Text(
-            '${player.name} (${player.role})',
-            style: const TextStyle(
-              color: Colors.orange,
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        );
-      }
-      messages.add(const SizedBox(height: 16));
-    }
-
-    // Liste des joueurs tués pendant la nuit
-    final killedPlayers = widget.game.players
-        .where((p) => p.wasAttackedTonight && !p.isAlive)
-        .toList();
-    
-    if (killedPlayers.isNotEmpty) {
-      messages.add(
-        const Text(
-          'Les joueurs suivants ont été tués cette nuit :',
-          style: TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-      messages.add(const SizedBox(height: 8));
-      
-      for (final player in killedPlayers) {
-        messages.add(
-          Text(
-            '${player.name} (${player.role})',
-            style: const TextStyle(
+          const Text(
+            'Les joueurs suivants ont succombé cette nuit :',
+            style: TextStyle(
               color: Colors.red,
+              fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
           ),
         );
+        messages.add(const SizedBox(height: 8));
+        
+        for (final player in killedPlayers) {
+          messages.add(
+            Text(
+              '${player.name} (${player.role})',
+              style: const TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
+        messages.add(const SizedBox(height: 16));
+      }
+
+      if (survivedPlayers.isNotEmpty) {
+        messages.add(
+          const Text(
+            'Les joueurs suivants ont survécu à une attaque :',
+            style: TextStyle(
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
+        messages.add(const SizedBox(height: 8));
+        
+        for (final player in survivedPlayers) {
+          messages.add(
+            Text(
+              player.name,
+              style: const TextStyle(
+                color: Colors.green,
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
       }
     }
 
@@ -550,6 +520,93 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  void _showEventSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black87,
+        title: const Text(
+          'Générer un événement',
+          style: TextStyle(color: Colors.amber),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              onPressed: () => _showEventDialog('Loups'),
+              child: const Text(
+                'Événement favorable aux Loups',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              onPressed: () => _showEventDialog('Neutre'),
+              child: const Text(
+                'Événement Neutre',
+                style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              onPressed: () => _showEventDialog('Villageois'),
+              child: const Text(
+                'Événement favorable aux Villageois',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showEventDialog(String type) {
+    final event = RoleManager.getRandomEvent(type);
+    if (event.isEmpty) return;
+
+    Navigator.pop(context); // Ferme le dialogue de sélection
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black87,
+        title: Text(
+          'Événement ${type == "Loups" ? "Loups" : type == "Villageois" ? "Villageois" : "Neutre"}',
+          style: TextStyle(
+            color: type == "Loups" 
+                ? Colors.red 
+                : type == "Villageois" 
+                    ? Colors.green 
+                    : Colors.amber
+          ),
+        ),
+        content: Text(
+          event,
+          style: const TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Fermer', style: TextStyle(color: Colors.amber)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -566,9 +623,35 @@ class _GameScreenState extends State<GameScreen> {
               case 'info':
                 GameInfoDialog.show(context, widget.game);
                 break;
+              case 'home':
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                break;
+              case 'speeches':
+                SpeechListDialog.show(context);
+                break;
             }
           },
           itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'speeches',
+              child: Row(
+                children: [
+                  Icon(Icons.menu_book, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Discours', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
+              value: 'info',
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.amber),
+                  SizedBox(width: 8),
+                  Text('Informations', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
             const PopupMenuItem(
               value: 'restart',
               child: Row(
@@ -580,12 +663,12 @@ class _GameScreenState extends State<GameScreen> {
               ),
             ),
             const PopupMenuItem(
-              value: 'info',
+              value: 'home',
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: Colors.amber),
+                  Icon(Icons.home, color: Colors.white),
                   SizedBox(width: 8),
-                  Text('Informations', style: TextStyle(color: Colors.white)),
+                  Text('Retour au menu', style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -812,30 +895,56 @@ class _GameScreenState extends State<GameScreen> {
                 ),
                 // Boutons en bas de l'écran
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton.icon(
-                    onPressed: _toggleDayPhase,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: widget.game.currentPhase == DayPhase.night
-                          ? Colors.amber // couleur soleil
-                          : Colors.indigo, // couleur nuit
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: _toggleDayPhase,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: widget.game.currentPhase == DayPhase.night
+                              ? Colors.amber // couleur soleil
+                              : Colors.indigo, // couleur nuit
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        icon: Icon(
+                          widget.game.currentPhase == DayPhase.night
+                              ? Icons.wb_sunny
+                              : Icons.nightlight_round,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        label: Text(
+                          widget.game.currentPhase == DayPhase.night
+                              ? 'Lever du soleil'
+                              : 'Coucher du soleil',
+                          style: const TextStyle(fontSize: 12, color: Colors.white),
+                        ),
                       ),
-                    ),
-                    icon: Icon(
-                      widget.game.currentPhase == DayPhase.night
-                          ? Icons.wb_sunny
-                          : Icons.nightlight_round,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      widget.game.currentPhase == DayPhase.night
-                          ? 'Lever du soleil'
-                          : 'Coucher du soleil',
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                      const SizedBox(width: 12),
+                      ElevatedButton.icon(
+                        onPressed: _showEventSelectionDialog,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.event,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        label: const Text(
+                          'Générer un événement',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -951,186 +1060,292 @@ class _GameScreenState extends State<GameScreen> {
                 activeColor: Colors.green,
               ),
               const Divider(color: Colors.amber),
-              // Protection du Garde
-              SwitchListTile(
-                title: const Text(
-                  'Protégé par le Garde',
-                  style: TextStyle(color: Colors.white),
-                ),
-                secondary: const Icon(Icons.security, color: Colors.blue),
-                value: player.isProtectedByGuard,
-                onChanged: (bool value) {
-                  setState(() {
+                // Protection du Garde
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Protégé par le Garde',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.security, color: Colors.blue),
+                  value: player.isProtectedByGuard,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isProtectedByGuard = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isProtectedByGuard = value;
+                    });
+                  },
+                  activeColor: Colors.blue,
+                  );
                 },
-                activeColor: Colors.blue,
-              ),
-              // Protection de l'Avocat
-              SwitchListTile(
-                title: const Text(
-                  'Protégé par l\'Avocat',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.gavel, color: Colors.blue),
-                value: player.isProtectedByLawyer,
-                onChanged: (bool value) {
-                  setState(() {
+                // Protection de l'Avocat
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Protégé par l\'Avocat',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.gavel, color: Colors.blue),
+                  value: player.isProtectedByLawyer,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isProtectedByLawyer = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isProtectedByLawyer = value;
+                    });
+                  },
+                  activeColor: Colors.blue,
+                  );
                 },
-                activeColor: Colors.blue,
-              ),
-              // Percepteur
-              SwitchListTile(
-                title: const Text(
-                  'Ciblé par le Percepteur',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.monetization_on, color: Colors.amber),
-                value: player.isTargetedByCollector,
-                onChanged: (bool value) {
-                  setState(() {
+                // Percepteur
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Ciblé par le Percepteur',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.monetization_on, color: Colors.amber),
+                  value: player.isTargetedByCollector,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isTargetedByCollector = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isTargetedByCollector = value;
+                    });
+                  },
+                  activeColor: Colors.amber,
+                  );
                 },
-                activeColor: Colors.amber,
-              ),
-              // Amoureux
-              SwitchListTile(
-                title: const Text(
-                  'Amoureux',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.favorite, color: Colors.red),
-                value: player.isInLove,
-                onChanged: (bool value) {
-                  setState(() {
+                // Amoureux
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Amoureux',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.favorite, color: Colors.red),
+                  value: player.isInLove,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isInLove = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isInLove = value;
+                    });
+                  },
+                  activeColor: Colors.red,
+                  );
                 },
-                activeColor: Colors.red,
-              ),
-              // Maire
-              SwitchListTile(
-                title: const Text(
-                  'Maire',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.star, color: Colors.amber),
-                value: player.isMayor,
-                onChanged: (bool value) {
-                  setState(() {
+                // Maire
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Maire',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.star, color: Colors.amber),
+                  value: player.isMayor,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isMayor = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isMayor = value;
+                    });
+                  },
+                  activeColor: Colors.amber,
+                  );
                 },
-                activeColor: Colors.amber,
-              ),
-              // Sacrifié
-              SwitchListTile(
-                title: const Text(
-                  'Sacrifié',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.local_fire_department, color: Colors.red),
-                value: player.isSacrified,
-                onChanged: (bool value) {
-                  setState(() {
+                // Sacrifié
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Sacrifié',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.local_fire_department, color: Colors.red),
+                  value: player.isSacrified,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isSacrified = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isSacrified = value;
+                    });
+                  },
+                  activeColor: Colors.red,
+                  );
                 },
-                activeColor: Colors.red,
-              ),
-              // Idole de l'Enfant Sauvage
-              SwitchListTile(
-                title: const Text(
-                  'Idole de l\'Enfant Sauvage',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.child_care, color: Colors.green),
-                value: player.isWildChildIdol,
-                onChanged: (bool value) {
-                  setState(() {
+                // Idole de l'Enfant Sauvage
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Idole de l\'Enfant Sauvage',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.child_care, color: Colors.green),
+                  value: player.isWildChildIdol,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isWildChildIdol = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isWildChildIdol = value;
+                    });
+                  },
+                  activeColor: Colors.green,
+                  );
                 },
-                activeColor: Colors.green,
-              ),
+                ),
               // Attaqué cette nuit
-              SwitchListTile(
-                title: const Text(
-                  'Attaqué cette nuit',
-                  style: TextStyle(color: Colors.white),
-                ),
-                secondary: const Icon(Icons.warning, color: Colors.orange),
-                value: player.wasAttackedTonight,
-                onChanged: (bool value) {
-                  setState(() {
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Attaqué cette nuit',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.warning, color: Colors.orange),
+                  value: player.wasAttackedTonight,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.wasAttackedTonight = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.wasAttackedTonight = value;
+                    });
+                  },
+                  activeColor: Colors.orange,
+                  );
                 },
-                activeColor: Colors.orange,
-              ),
-              // Choisi par le boulanger
-              SwitchListTile(
-                title: const Text(
-                  'Choisi par le boulanger',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.bakery_dining, color: Colors.brown),
-                value: player.isChosenByBaker,
-                onChanged: (bool value) {
-                  setState(() {
+                // Choisi par le boulanger
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Choisi par le boulanger',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.bakery_dining, color: Colors.brown),
+                  value: player.isChosenByBaker,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isChosenByBaker = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isChosenByBaker = value;
+                    });
+                  },
+                  activeColor: Colors.brown,
+                  );
                 },
-                activeColor: Colors.brown,
-              ),
-              // Choisi par le corbeau
-              SwitchListTile(
-                title: const Text(
-                  'Choisi par le corbeau',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.flutter_dash, color: Colors.grey),
-                value: player.isAccusedByRaven,
-                onChanged: (bool value) {
-                  setState(() {
+                // Choisi par le corbeau
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Choisi par le corbeau',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.flutter_dash, color: Colors.grey),
+                  value: player.isAccusedByRaven,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isAccusedByRaven = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isAccusedByRaven = value;
+                    });
+                  },
+                  activeColor: Colors.grey,
+                  );
                 },
-                activeColor: Colors.grey,
-              ),
-              // Accusé par vote
-              SwitchListTile(
-                title: const Text(
-                  'Accusé par vote',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.how_to_vote, color: Colors.orange),
-                value: player.isAccusedByVote,
-                onChanged: (bool value) {
-                  setState(() {
+                // Accusé par vote
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Accusé par vote',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.how_to_vote, color: Colors.orange),
+                  value: player.isAccusedByVote,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.isAccusedByVote = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.isAccusedByVote = value;
+                    });
+                  },
+                  activeColor: Colors.orange,
+                  );
                 },
-                activeColor: Colors.orange,
-              ),
-              // Seconde chance
-              SwitchListTile(
-                title: const Text(
-                  'Seconde chance',
-                  style: TextStyle(color: Colors.white),
                 ),
-                secondary: const Icon(Icons.replay_circle_filled, color: Colors.green),
-                value: player.secondChance,
-                onChanged: (bool value) {
-                  setState(() {
+                // Seconde chance
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Seconde chance',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.replay_circle_filled, color: Colors.green),
+                  value: player.secondChance,
+                  onChanged: (bool value) {
+                    setState(() {
                     player.secondChance = value;
-                  });
+                    });
+                    this.setState(() {
+                    player.secondChance = value;
+                    });
+                  },
+                  activeColor: Colors.green,
+                  );
                 },
-                activeColor: Colors.green,
-              ),
+                ),
+              // Transformé par le Loup Noir
+                StatefulBuilder(
+                builder: (context, setState) {
+                  return SwitchListTile(
+                  title: const Text(
+                    'Transformé par le Loup Noir',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  secondary: const Icon(Icons.dark_mode, color: Colors.grey),
+                  value: player.wasTransformedIntoWolf,
+                  onChanged: (bool value) {
+                    setState(() {
+                    player.wasTransformedIntoWolf = value;
+                    });
+                    this.setState(() {
+                    player.wasTransformedIntoWolf = value;
+                    });
+                  },
+                  activeColor: Colors.grey,
+                  );
+                },
+                ),
               const Divider(color: Colors.amber),
             ],
           ),

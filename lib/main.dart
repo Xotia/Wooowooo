@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'screens/new_game_screen.dart';
+import 'screens/documentation_screen.dart';
+import 'services/role_manager.dart';
+import 'services/speech_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialiser les services
+  try {
+    await RoleManager.initialize();
+    await SpeechService.initialize();
+  } catch (e) {
+    print('Erreur lors de l\'initialisation des services: $e');
+  }
+
   runApp(const MyApp());
 }
 
@@ -12,23 +25,42 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Wooowooo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.dark(
-          primary: Colors.amber,
-          secondary: Colors.deepOrange,
-          surface: Colors.black87,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.amber,
+          brightness: Brightness.dark,
         ),
+        fontFamily: 'MedievalSharp',  // Police par défaut pour toute l'application
         textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 48,
+            color: Colors.amber,
+          ),
+          displayMedium: TextStyle(
+            fontSize: 36,
+            color: Colors.amber,
+          ),
+          displaySmall: TextStyle(
+            fontSize: 24,
+            color: Colors.amber,
+          ),
           headlineLarge: TextStyle(
-            color: Colors.white,
             fontSize: 32,
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 28,
+            color: Colors.white,
           ),
           bodyLarge: TextStyle(
-            color: Colors.white70,
             fontSize: 18,
+            color: Colors.white,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
           ),
         ),
       ),
@@ -148,7 +180,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implémenter la navigation vers la documentation
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DocumentationScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepOrange,
